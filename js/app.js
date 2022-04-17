@@ -20,8 +20,6 @@ const card = [
 const movesCounter = document.querySelector(".moves");
 let openCard = [];
 
-// initGame();
-
 function generateCard(card) {
   return `<li class="card" data-card=${card}><i class="fa ${card}"></i></li>`;
 }
@@ -47,35 +45,34 @@ function initGame() {
   cardTemplate = shuffle(card).map((card) => generateCard(card));
   deck.innerHTML = cardTemplate.join("");
 }
+
 initGame();
 var cards = document.querySelectorAll(".card");
 cards.forEach((card) => {
   card.addEventListener("click", function (e) {
-    console.log("asdsad");
-    // if (openCard.length < 3) {
-    //   card.classList.add("open", "show");
-    // }
     if (
       !card.classList.contains("open") &&
       !card.classList.contains("show") &&
       !card.classList.contains("match")
     ) {
       openCard.push(card);
-      card.classList.add("open", "show");
+      if (openCard.length < 3) {
+        card.classList.add("open", "show");
 
-      if (openCard.length == 2) {
-        if (openCard[0].dataset.card == openCard[1].dataset.card) {
-          openCard.forEach((element) => {
-            element.classList.add("open", "show", "match");
-          });
-          openCard = [];
-        } else {
-          setTimeout(() => {
+        if (openCard.length == 2) {
+          if (openCard[0].dataset.card == openCard[1].dataset.card) {
             openCard.forEach((element) => {
-              element.classList.remove("open", "show");
+              element.classList.add("open", "show", "match");
             });
             openCard = [];
-          }, 500);
+          } else {
+            setTimeout(() => {
+              openCard.forEach((element) => {
+                element.classList.remove("open", "show");
+              });
+              openCard = [];
+            }, 500);
+          }
         }
       }
     }
