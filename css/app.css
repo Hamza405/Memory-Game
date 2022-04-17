@@ -33,6 +33,11 @@ h1 {
   font-weight: 300;
 }
 
+.restart {
+  border: none;
+  background-color: transparent;
+}
+
 /*
  * Styles for the deck of cards
  */

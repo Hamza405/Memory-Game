@@ -16,9 +16,11 @@ const card = [
   "fa-bomb",
   "fa-bomb",
 ];
+let openCard = [];
 
 const movesCounter = document.querySelector(".moves");
-let openCard = [];
+const restart = document.querySelector(".restart");
+let moves = 0;
 
 function generateCard(card) {
   return `<li class="card" data-card=${card}><i class="fa ${card}"></i></li>`;
@@ -43,11 +45,21 @@ function shuffle(array) {
 function initGame() {
   const deck = document.querySelector(".deck");
   cardTemplate = shuffle(card).map((card) => generateCard(card));
+  movesCounter.innerText = moves;
   deck.innerHTML = cardTemplate.join("");
 }
 
 initGame();
-var cards = document.querySelectorAll(".card");
+
+restart.addEventListener("click", function (e) {
+  cards.forEach((card) => {
+    card.classList.remove("open", "show", "match");
+  });
+  moves = 0;
+  movesCounter.innerText = moves;
+});
+
+const cards = document.querySelectorAll(".card");
 cards.forEach((card) => {
   card.addEventListener("click", function (e) {
     if (
@@ -64,6 +76,8 @@ cards.forEach((card) => {
             openCard.forEach((element) => {
               element.classList.add("open", "show", "match");
             });
+            moves++;
+            movesCounter.innerText = moves;
             openCard = [];
           } else {
             setTimeout(() => {
