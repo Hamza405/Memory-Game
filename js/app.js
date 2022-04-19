@@ -17,10 +17,17 @@ const card = [
   "fa-bomb",
 ];
 let openCard = [];
+let openedCard = [];
 
 const movesCounter = document.querySelector(".moves");
 const restart = document.querySelector(".restart");
+let timerWidget = document.querySelector(".timer");
 let moves = 0;
+let cardMatched = 7;
+let firstClick = false;
+let interval;
+let sec = 0;
+let min = 0;
 
 function generateCard(card) {
   return `<li class="card" data-card=${card}><i class="fa ${card}"></i></li>`;
@@ -49,19 +56,40 @@ function initGame() {
   deck.innerHTML = cardTemplate.join("");
 }
 
-initGame();
+function timer() {
+  interval = setInterval(function () {
+    timerWidget.innerHTML = `0:${min}:${sec}`;
+    sec++;
+    if (sec == 60) {
+      min++;
+      sec = 0;
+    }
+  }, 1000);
 
-restart.addEventListener("click", function (e) {
-  cards.forEach((card) => {
-    card.classList.remove("open", "show", "match");
+  restart.addEventListener("click", function (e) {
+    clearInterval(interval);
+    timerWidget.innerHTML = "0:0:0";
+    cards.forEach((card) => {
+      card.classList.remove("open", "show", "match");
+    });
+    firstClick = false;
+    moves = 0;
+    min = 0;
+    sec = 0;
+    openedCard = [];
+    movesCounter.innerText = moves;
   });
-  moves = 0;
-  movesCounter.innerText = moves;
-});
+}
+
+initGame();
 
 const cards = document.querySelectorAll(".card");
 cards.forEach((card) => {
   card.addEventListener("click", function (e) {
+    if (firstClick == false) {
+      timer();
+      firstClick = true;
+    }
     if (
       !card.classList.contains("open") &&
       !card.classList.contains("show") &&
@@ -73,11 +101,12 @@ cards.forEach((card) => {
 
         if (openCard.length == 2) {
           if (openCard[0].dataset.card == openCard[1].dataset.card) {
+            cardMatched += 1;
             openCard.forEach((element) => {
               element.classList.add("open", "show", "match");
             });
-            moves++;
-            movesCounter.innerText = moves;
+            openedCard.push(openCard[0]);
+            openedCard.push(openCard[1]);
             openCard = [];
           } else {
             setTimeout(() => {
@@ -87,8 +116,16 @@ cards.forEach((card) => {
               openCard = [];
             }, 500);
           }
+          moves++;
+          movesCounter.innerText = moves;
         }
       }
+    }
+    if (openedCard.length >= 16) {
+      clearInterval(interval);
+      firstClick = false;
+      const message = `Booooooyyyyyyaaaaaa, The monster end the game with ${moves} moves in time ${min}:${sec}`;
+      window.alert(message);
     }
   });
 });
