@@ -112,3 +112,7 @@ h1 {
   float: right;
   cursor: pointer;
 }
+
+.fill-star {
+  color: aqua;
+}

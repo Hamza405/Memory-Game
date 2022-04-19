@@ -22,6 +22,8 @@ let openedCard = [];
 const movesCounter = document.querySelector(".moves");
 const restart = document.querySelector(".restart");
 let timerWidget = document.querySelector(".timer");
+let stars = document.querySelectorAll(".stars");
+
 let moves = 0;
 let cardMatched = 7;
 let firstClick = false;
@@ -67,6 +69,7 @@ function timer() {
   }, 1000);
 
   restart.addEventListener("click", function (e) {
+    stars.forEach((star) => star.classList.remove("fill-star"));
     clearInterval(interval);
     timerWidget.innerHTML = "0:0:0";
     cards.forEach((card) => {
@@ -122,6 +125,16 @@ cards.forEach((card) => {
       }
     }
     if (openedCard.length >= 16) {
+      if (min == 0 && sec <= 30) {
+        stars[0].classList.add("fill-star");
+        stars[1].classList.add("fill-star");
+        stars[2].classList.add("fill-star");
+      } else if (min <= 1) {
+        stars[0].classList.add("fill-star");
+        stars[1].classList.add("fill-star");
+      } else {
+        stars[0].classList.add("fill-star");
+      }
       clearInterval(interval);
       firstClick = false;
       const message = `Booooooyyyyyyaaaaaa, The monster end the game with ${moves} moves in time ${min}:${sec}`;
