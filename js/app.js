@@ -152,11 +152,11 @@ cards.forEach((card) => {
       firstClick = false;
 
       // draw winner stars
-      if (min == 0 && sec <= 30) {
+      if (moves <= 15 && min === 0) {
         stars.forEach(function (e) {
           e.classList.add("fill-star");
         });
-      } else if (min <= 1) {
+      } else if (moves <= 25) {
         stars[0].classList.add("fill-star");
         stars[1].classList.add("fill-star");
       } else {
