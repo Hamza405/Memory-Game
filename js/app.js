@@ -1,5 +1,4 @@
 // player name
-// setTimeout(() => fetchData(), 100);
 let nikeName;
 do {
   nikeName = window.prompt("Hii monster, enter your name");
@@ -21,19 +20,24 @@ function fetchData() {
       }
       playerGames.length = 0;
       playerGames.push(...s);
-      console.log(playerGames);
+
       playerName.innerHTML = nikeName;
       while (gameList.hasChildNodes()) {
         gameList.removeChild(gameList.lastChild);
       }
-      playerGames.forEach((data) => {
-        const item = document.createElement("li");
-        item.classList.add("list-item");
-        item.innerText = `You finish the game with ${data["moves"]} movie in ${data["min"]}:${data["sec"]}`;
-        gameList.appendChild(item);
-      });
+      if (playerGames.length === 0) {
+        gameList.innerHTML = "You dont have any game yet...";
+      } else {
+        playerGames.forEach((data) => {
+          const item = document.createElement("li");
+          item.classList.add("list-item");
+          item.innerText = `You finish the game with ${data["moves"]} movie in ${data["min"]}:${data["sec"]}`;
+          gameList.appendChild(item);
+        });
+      }
     });
 }
+
 // define Cards Icons
 const card = [
   "fa-diamond",
