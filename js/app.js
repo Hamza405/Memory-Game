@@ -1,3 +1,34 @@
+// player name
+// setTimeout(() => fetchData(), 100);
+let nikeName;
+do {
+  nikeName = window.prompt("Hii monster, enter your name");
+  fetchData();
+} while (nikeName == "" || nikeName == null);
+
+const playerGames = [];
+
+// fetch player data and fill it in the page
+function fetchData() {
+  fetch("https://tishreen-62882-default-rtdb.firebaseio.com/memorygame.json")
+    .then((res) => res.json())
+    .then((data) => {
+      let s = [];
+      for (var i in data) {
+        if (data[i]["name"] === nikeName) {
+          s.push(data[i]);
+        }
+      }
+      playerGames.push(...s);
+      playerName.innerHTML = nikeName;
+      playerGames.forEach((data) => {
+        const item = document.createElement("li");
+        item.classList.add("list-item");
+        item.innerText = `You finish the game with ${data["moves"]} movie in ${data["min"]}:${data["sec"]}`;
+        gameList.appendChild(item);
+      });
+    });
+}
 // define Cards Icons
 const card = [
   "fa-diamond",
@@ -23,6 +54,8 @@ const movesCounter = document.querySelector(".moves");
 const restart = document.querySelector(".restart");
 let timerWidget = document.querySelector(".timer");
 let stars = document.querySelectorAll(".stars");
+const gameList = document.querySelector(".list");
+const playerName = document.getElementById("name");
 
 // define game variables
 let moves = 0;
@@ -165,6 +198,23 @@ cards.forEach((card) => {
 
       // winner message
       const message = `Booooooyyyyyyaaaaaa, The monster end the game with ${moves} moves in time ${min}:${sec}`;
+      const data = {
+        name: nikeName,
+        moves: moves,
+        min: min,
+        sec: sec,
+      };
+      fetch(
+        "https://tishreen-62882-default-rtdb.firebaseio.com/memorygame.json",
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      fetchData();
       window.alert(message);
     }
   });
