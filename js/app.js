@@ -19,8 +19,13 @@ function fetchData() {
           s.push(data[i]);
         }
       }
+      playerGames.length = 0;
       playerGames.push(...s);
+      console.log(playerGames);
       playerName.innerHTML = nikeName;
+      while (gameList.hasChildNodes()) {
+        gameList.removeChild(gameList.lastChild);
+      }
       playerGames.forEach((data) => {
         const item = document.createElement("li");
         item.classList.add("list-item");
